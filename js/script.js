@@ -7,7 +7,7 @@
     const maxLengthInput = parseInt(novoItem.maxLength)
     const caracteresRestantesSpan = document.querySelector('.caracteres-restantes p > span')
     const lis = todoList.getElementsByTagName('li')
-    
+
 
     caracteresRestantesSpan.textContent = maxLengthInput
 
@@ -19,14 +19,12 @@
     function generateLiTask(obj) {
         const li = document.createElement('li')
         const btn = document.createElement('button')
-        const btnI = document.createElement('i')
         const p = document.createElement('p')
         const edit = document.createElement('i')
         const thrash = document.createElement('i')
 
         li.className = 'todo-item'
         btn.className = 'check-button'
-        btnI.className = 'far fa-square'
         p.className = 'task'
         edit.className = 'fas fa-edit'
         thrash.className = 'fas fa-trash-alt'
@@ -34,22 +32,25 @@
         p.textContent = obj.name
 
         // Criando atributos para os botões e facilitar a checkagem pois se os ícones forem trocados, os atributos permanecem e o código não perde efeito
-        btnI.setAttribute('b-action', 'check')
+        btn.setAttribute('b-action', 'check')
         edit.setAttribute('b-action', 'edit')
         thrash.setAttribute('b-action', 'thrash')
 
-        btn.appendChild(btnI)
+
+        // Adicionar o <i> de verificação de completo. Vai ser útil quando estivermos utilizando o localStorage
+        btn.innerHTML = `<i b-action='check' class='fas fa-check ${obj.completed ? '' : 'displayNone'}'></i>`
         li.appendChild(btn)
         li.appendChild(p)
         li.appendChild(edit)
         li.appendChild(thrash)
-        //addEventListenerToLi(li)
 
+        // criando a div oculta e seus elementos
         const containerEdit = document.createElement('div')
         containerEdit.className = 'editContainer'
         const inputEdit = document.createElement('input')
         inputEdit.setAttribute('type', 'text')
         inputEdit.className = 'editInput'
+        inputEdit.value = obj.name
         containerEdit.appendChild(inputEdit)
 
 
@@ -95,8 +96,8 @@
 
     }
 
-    function clickedUl(e){
-        
+    function clickedUl(e) {
+
         /* switch(e.target.getAttribute('b-action')){
             case 'check':
                 console.log('teste')
@@ -125,35 +126,51 @@
             default:
                 return
         } */
-        console.log(lis)
+        
         const bAction = e.target.getAttribute('b-action')
-        if(!bAction) return
+        if (!bAction) return
 
-        let currentElement = e.target
+        let currentLi = e.target
 
-        while(currentElement.nodeName !== 'LI'){
-            currentElement = currentElement.parentElement
+        while (currentLi.nodeName !== 'LI') {
+            currentLi = currentLi.parentElement
         }
-        const currentLiTarget = [...lis].indexOf(currentElement)
-        console.log(currentLiTarget)
+        const currentLiIndex = [...lis].indexOf(currentLi)
+        console.log(currentLiIndex)
 
         const actions = {
-            check: console.log('1'),
-            edit: function(){
-                currentElement.querySelector('div').style.display = 'flex'
+            check: function(){
+                arrayTasks[currentLiIndex].completed = !arrayTasks[currentLiIndex].completed
+                if(arrayTasks[currentLiIndex].completed){
+                    currentLi.querySelector('.fa-check').classList.remove('displayNone')
+                } else{
+                    currentLi.querySelector('.fa-check').classList.add('displayNone')
+                }
             },
-            thrash: function(){
-                arrayTasks.splice(currentLiTarget, 1)
+            edit: function () {
+                [...todoList.querySelectorAll('.editContainer')].forEach(cont => {
+                    cont.style = ''
+                })
+                currentLi.querySelector('.editContainer').style.display = 'flex'
+            },
+            thrash: function () {
+                arrayTasks.splice(currentLiIndex, 1)
                 render()
             },
-            editBtn: function(){
-                currentElement.querySelector('p').textContent = currentElement.querySelector('.editInput').value
-                currentElement.querySelector('.editInput').value = ''
+            editBtn: function () {
+                const atualizandoInput = currentLi.querySelector('.editInput')
+                arrayTasks[currentLiIndex].name = atualizandoInput.value
+
+                console.log(arrayTasks)
+                render()
             },
-            cancelBtn: function(){currentElement.querySelector('div').style.display = 'none'}
+            cancelBtn: function () {
+                currentLi.querySelector('.editContainer').style.display = 'none'
+                currentLi.querySelector('.editInput').value = arrayTasks[currentLiIndex].name
+            }
         }
 
-        if(actions[bAction]){
+        if (actions[bAction]) {
             actions[bAction]()
         }
 
@@ -168,7 +185,7 @@
     // adiciona listener ao input. Toda vez que o usuário digitar, um contador diminuirá os caracteres restantes 
 
     novoItem.addEventListener('input', function () {
-        
+
         let restante = maxLengthInput - parseInt(novoItem.value.length)
         caracteresRestantesSpan.textContent = restante
     })

@@ -177,6 +177,20 @@ button {
     border: none;
 }
 
+
+.fa-check {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    color:#726a95;
+     
+}
+
+.fa-check.displayNone{
+    display:none;
+}
+
 .caracteres-restantes{
     display: block;
     width: 100%;
@@ -236,3 +250,4 @@ button {
 .editContainer .cancelButton:hover{
     background-color: #6f3131;
 }
+
