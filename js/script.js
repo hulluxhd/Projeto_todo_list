@@ -13,6 +13,9 @@
 
     let arrayTasks = []
 
+    // ADICIONAR LOCALSTORAGE!!!
+
+
     // FUNCTIONS
 
     // Função que adiciona os nós ao dom 
@@ -82,8 +85,10 @@
             name: task,
             createdAt: Date.now(),
             completed: false
+
         })
     }
+
 
 
     // renderiza os elementos do array de objetos
@@ -98,35 +103,8 @@
 
     function clickedUl(e) {
 
-        /* switch(e.target.getAttribute('b-action')){
-            case 'check':
-                console.log('teste')
-                break
 
-            
-            case 'edit':
-                e.target.parentElement.querySelector('.editContainer').style.display = 'flex'
-                break
 
-            case 'thrash':
-                todoList.removeChild(e.target.parentElement)
-                break
-
-            case 'editBtn':
-                const task = e.target.parentElement.parentElement.querySelector('.task')
-                const editInput = e.target.parentElement.querySelector('.editContainer .editInput')
-                task.textContent = editInput.value
-                editInput.value = ''
-                break
-
-            case 'cancelBtn':
-                e.target.parentElement.parentElement.querySelector('.editContainer').style.display = 'none'
-                break
-
-            default:
-                return
-        } */
-        
         const bAction = e.target.getAttribute('b-action')
         if (!bAction) return
 
@@ -136,19 +114,21 @@
             currentLi = currentLi.parentElement
         }
         const currentLiIndex = [...lis].indexOf(currentLi)
-        console.log(currentLiIndex)
+        
 
         const actions = {
-            check: function(){
+            check: function () {
                 arrayTasks[currentLiIndex].completed = !arrayTasks[currentLiIndex].completed
-                if(arrayTasks[currentLiIndex].completed){
+                if (arrayTasks[currentLiIndex].completed) {
                     currentLi.querySelector('.fa-check').classList.remove('displayNone')
-                } else{
+                } else {
                     currentLi.querySelector('.fa-check').classList.add('displayNone')
                 }
+                render()
+
             },
             edit: function () {
-                [...todoList.querySelectorAll('.editContainer')].forEach(cont => {
+                ;[...todoList.querySelectorAll('.editContainer')].forEach(cont => {
                     cont.style = ''
                 })
                 currentLi.querySelector('.editContainer').style.display = 'flex'
@@ -160,8 +140,6 @@
             editBtn: function () {
                 const atualizandoInput = currentLi.querySelector('.editInput')
                 arrayTasks[currentLiIndex].name = atualizandoInput.value
-
-                console.log(arrayTasks)
                 render()
             },
             cancelBtn: function () {
@@ -175,9 +153,6 @@
         }
 
     }
-
-
-
 
     // LISTENERS
 
@@ -207,18 +182,6 @@
         }
     })
 
-
     todoList.addEventListener('click', clickedUl)
-
-    // adiciona listener às 'lis' criadas dinamicamente
-    /* function addEventListenerToLi(li){
-        li.addEventListener('click', function(e){
-            console.log(e)
-            console.log(e.target)
-            console.log(this)
-            e.target.focus()
-        })
-    } */
-
     render()
 }())
