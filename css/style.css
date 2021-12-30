@@ -182,3 +182,57 @@ button {
     width: 100%;
     margin-top: 7px;
 }
+
+/* Container de Edição */
+
+.editContainer{
+    position:absolute;
+    z-index: 99;
+    top: 4rem;
+    left: 2rem;
+    width: 120%;
+    height: 6rem;
+    background-color: rgb(225, 208, 252);
+    border-radius: .4rem;
+    box-shadow: 3px 3px 15px rgba(77, 77, 77, .8);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    display: none;
+}
+
+.editContainer .editInput{
+    background-color: transparent;
+    border: 2px solid #4b3d8a;
+    border-radius: .2rem;
+    padding: .5rem 1rem;
+}
+
+.editContainer .editInput:focus{
+    outline: none;
+}
+
+.editContainer .editButton,
+.editContainer .cancelButton{
+    border: none;
+    outline: transparent;
+    padding: .7rem 2rem;
+}
+
+.editContainer .editButton{
+    background-color: #4b3d8a;
+    color: seashell;
+}
+
+.editContainer .cancelButton{
+    background-color: #8a3d3d;
+    color: seashell;
+}
+
+.editContainer .editButton:hover{
+    background-color: #8478b9;   
+}
+
+.editContainer .cancelButton:hover{
+    background-color: #6f3131;
+}
